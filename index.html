@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>Body Tracker</title>
+		<style>
+			#container {
+				margin: 0px auto;
+				width: 500px;
+				height: 375px;
+				border: 10px #333 solid;
+			}
+			video {
+				-webkit-transform: scaleX(-1);
+				transform: scaleX(-1);
+			}
+			#videoElement {
+				width: 500px;
+				height: 375px;
+				background-color: #666;
+			}
+		</style>
+	</head>
+	<body>
+		<div id="container">
+			<video autoplay="true" id="videoElement"></video>
+		</div>
+		<script>
+			var video = document.querySelector('#videoElement');
+			// get user media api is used to access the video
+			// can also be used for mic and other input devices
+			if (navigator.mediaDevices.getUserMedia) {
+				navigator.mediaDevices
+					.getUserMedia({ video: true })
+					.then(function (stream) {
+						video.srcObject = stream;
+					})
+					.catch(function (err0r) {
+						console.log('Something went wrong!');
+					});
+			}
+		</script>
+	</body>
+</html>
