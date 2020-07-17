@@ -6,9 +6,7 @@ function setup() {
   createCanvas(640, 480);
   video = createCapture(VIDEO);
   video.size(width, height);
-  
-
-
+  console.log(video.width,video.height);
   // Create a new poseNet method with a single detection
   poseNet = ml5.poseNet(video, modelReady);
   // This sets up an event that fills the global variable "poses"
@@ -50,6 +48,7 @@ function drawKeypoints()  {
       // let keypoint = pose.keypoints[j];
       // Only draw an ellipse is the pose probability is bigger than 0.2
       if (pose.nose.confidence > 0.2||pose.rightWrist.confidence>0.2) {
+        // console.log(poses)
         fill(255, 0, 0);
         noStroke();
         ellipse(pose.nose.x, pose.nose.y, 30);
@@ -57,7 +56,13 @@ function drawKeypoints()  {
         ellipse(pose.rightWrist.x, pose.rightWrist.y, 30);
         if(pose.nose.x>20&&pose.nose.x<180&&pose.nose.y>20&&pose.nose.y<180&&time==0){
           time = setTimeout(()=>{
-            console.log('drums')
+            var sound = new Howl({
+              src: ['sounds/base.mp3'],
+              onend: function() {
+                console.log('Finished!');
+              }
+            });
+            sound.play();
             time=0
           },1000)
         }
