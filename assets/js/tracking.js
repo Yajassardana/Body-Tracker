@@ -1,11 +1,13 @@
 let video;
 let poseNet;
 let poses = [];
-
+let time=0;
 function setup() {
   createCanvas(640, 480);
   video = createCapture(VIDEO);
   video.size(width, height);
+  
+
 
   // Create a new poseNet method with a single detection
   poseNet = ml5.poseNet(video, modelReady);
@@ -13,7 +15,7 @@ function setup() {
   // with an array every time new poses are detected
   poseNet.on('pose', function(results) {
     poses = results;
-    console.log(poses);
+    // console.log(poses);
   });
   // Hide the video element, and just show the canvas
   video.hide();
@@ -24,13 +26,14 @@ function modelReady() {
 }
 
 function draw() {
-  
   translate(video.width, 0);
-  //then scale it by -1 in the x-axis
+  // then scale it by -1 in the x-axis
   //to flip the image
   scale(-1, 1);
   //draw video capture feed as image inside p5 canvas
   image(video, 0, 0);
+  fill(0, 255, 0);
+  circle(100,100,80);
   // We can call both functions to draw all keypoints and the skeletons
   drawKeypoints();
   drawSkeleton();
@@ -46,13 +49,18 @@ function drawKeypoints()  {
       // A keypoint is an object describing a body part (like rightArm or leftShoulder)
       // let keypoint = pose.keypoints[j];
       // Only draw an ellipse is the pose probability is bigger than 0.2
-      if (pose.leftWrist.confidence > 0.2||pose.rightWrist.confidence>0.2) {
+      if (pose.nose.confidence > 0.2||pose.rightWrist.confidence>0.2) {
         fill(255, 0, 0);
         noStroke();
         ellipse(pose.nose.x, pose.nose.y, 30);
         ellipse(pose.leftWrist.x, pose.leftWrist.y, 30);
         ellipse(pose.rightWrist.x, pose.rightWrist.y, 30);
-
+        if(pose.nose.x>20&&pose.nose.x<180&&pose.nose.y>20&&pose.nose.y<180&&time==0){
+          time = setTimeout(()=>{
+            console.log('drums')
+            time=0
+          },1000)
+        }
       }
     }
   }
